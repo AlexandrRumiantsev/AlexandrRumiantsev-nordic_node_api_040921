@@ -39,7 +39,10 @@ app.get('/auth', function (req, res) {
 
 // Роут для регистрации
 app.get('/reg', function (req, res) {
-  moduleUser.ADD()
+  moduleUser.INIT(eventEmitter, res, req)
+  moduleUser.ADD(
+    eventEmitter
+  )
 })
 
 // Роут для получения всех пользователей
