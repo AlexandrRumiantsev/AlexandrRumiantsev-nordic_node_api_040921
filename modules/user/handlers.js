@@ -100,8 +100,38 @@ module.exports = {
     'EDIT': () => {
        
     },
-    'ADD': () => {
+    'ADD': (res, req) => {
        
+        /**
+         * Example
+         * http://localhost:3000/reg?data={"login": "admin", "password": "admin", "img": "", "role": "ADMIN", "email": "adm@list.ru"}
+         */
+         // Преобразуем JSON данные из GET параметра data в массив JS
+         console.log(req)
+         const dataArray = JSON.parse(req.query.data)
+         // Сгенерировать id через функцию uuid
+         const id = uuidv4();
+         // Формируем SQL для запроса в БД
+         const sql = `INSERT INTO users 
+         (id, login, password, img, role, email)
+             VALUES
+         ('${id}', '${dataArray.login}', '${dataArray.password}', '${dataArray.img}', '${dataArray.role}', '${dataArray.email}')    
+         `
+
+         const requestMessage = {
+             STATUS_CODE: 200,
+             REQUEST_TEXT: `Пользователь с id ${id} успешно добавлен`,
+             ID: id
+         }
+ 
+ 
+         connection.query(
+             sql,
+                 (err, result) => {
+                     err ? res.end(err) : res.end(JSON.stringify(requestMessage));
+                 }
+         );
+
     },
     'DEL': () => {
        
